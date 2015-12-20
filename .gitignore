@@ -3,6 +3,8 @@
 
 #db
 *.db
+*.db-journal
+
 
 #out
 out
