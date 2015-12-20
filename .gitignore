@@ -1,5 +1,11 @@
 #objects
 *.pyc
 
+#db
+*.db
+
+#out
+out
+
 #config
 /tweetstream/config.py
