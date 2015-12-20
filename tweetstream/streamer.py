@@ -1,6 +1,7 @@
 import config
 from sys import stderr
 from twitstream import TwitStream
+from contextlib import contextmanager
 
 class Streamer(object):
 	"""Interface to TwitStream object"""
@@ -11,16 +12,16 @@ class Streamer(object):
 			client_token= config.TW_TOKEN, client_token_secret= config.TW_TOKEN_SECRET)
 		self.stream_handler.set_headers(headers)
 
-	def __enter__(self):
+	@contextmanager
+	def general_error_handler(self):
+		try:
+			yield
+		except ValueError:
+			stderr.write('\nIgnoring blank lines.\n')
+			pass
+		except KeyError:
+			stderr.write('\nMalformed data. Ignoring.\n')
+			pass
+
+	def start(self):
 		return self.stream_handler.stream()
-
-	def __exit__(self, type, value, traceback):
-		if isinstance(value, ValueError):
-			stderr.write('Ignoring blank lines.')
-			stderr.flush()
-			return True
-		elif isinstance(value, KeyError):
-			stderr.write('Malformed data. Ignoring.')
-			stderr.flush()
-			return True
-

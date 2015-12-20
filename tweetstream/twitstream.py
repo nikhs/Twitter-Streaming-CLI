@@ -53,24 +53,3 @@ class TwitStream(object):
 			if line:
 				yield line
 
-if __name__ == '__main__':
-	import config
-	from json import loads
-	from utility import twitter_time_to_local
-	stream_handler = TwitStream(' d')
-	stream_handler.set_credentials(client_key= config.TW_KEY, client_secret= config.TW_SECRET,
-	 client_token= config.TW_TOKEN, client_token_secret= config.TW_TOKEN_SECRET)
-	stream_handler.set_headers({'user-agent':'testing'})
-	for line in stream_handler.stream():
-		try:
-			tweet = loads(line)
-			print '-'*40
-			print 'By: ', tweet['user']['screen_name'].encode('utf-8')
-			print tweet['text'].encode('utf-8')
-			print 'Created at', twitter_time_to_local(tweet['created_at'])
-
-			print '-'*40
-		except ValueError:
-			print 'argh'
-		except KeyError:
-			print 'groan'

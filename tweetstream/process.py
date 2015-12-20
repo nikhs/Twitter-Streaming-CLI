@@ -3,6 +3,7 @@ from streamer import Streamer
 from database import Database
 from json import loads
 from utility import twitter_time_to_unix, twitter_time_to_local
+from sys import stderr
 
 def start_background_mining(track):
 	""" initializes background mining of tweets. Stores them in a db.
@@ -13,8 +14,9 @@ def start_background_mining(track):
 	with Database() as db:
 		headers = {'User-Agent': ' Twitter Streaming CLI'}
 		tweet_count = 0
-		with Streamer(track, headers) as stream:
-			for line in stream:
+		streamer = Streamer(track, headers)
+		for line in streamer.start():
+			with streamer.general_error_handler():
 				tweet = loads(line)
 
 				links = []
@@ -24,8 +26,8 @@ def start_background_mining(track):
 
 				db.insert(tweet['id_str'], tweet['user']['screen_name'],
 				 tweet['user']['statuses_count'], tweet['text'], links, twitter_time_to_unix(tweet['created_at']))
-
-				print 'Processed %d tweet'%(++tweet_count)
+				tweet_count += 1
+				stderr.write('Processed %d tweet\n'%(tweet_count))
 
 
 def start_streaming(track):
@@ -36,8 +38,9 @@ def start_streaming(track):
 	 """
 
  	headers = {'User-Agent': ' Twitter Streaming CLI'}
-	with Streamer(track, headers) as stream:
-		for line in stream:
+	streamer = Streamer(track, headers)
+	for line in streamer.start():
+		with streamer.general_error_handler():
 			tweet = loads(line)
 
 			# Form data before printing to avoid incomplete output
@@ -53,5 +56,5 @@ def start_streaming(track):
 			print '-'*40
 
 if __name__ == '__main__':
-	print 'starting'
- 	start_streaming('')
+	print 'mining'
+ 	start_background_mining('')
