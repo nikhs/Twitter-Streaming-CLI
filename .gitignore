@@ -1,0 +1,5 @@
+#objects
+*.pyc
+
+#config
+/tweetstream/config.py
