@@ -13,6 +13,7 @@ class Database(object):
 	       	tweet INT NOT NULL,
 	       	links TEXT,
 	       	created_at INT NOT NULL);''')
+		# self.connection.execute('''DELETE FROM tweets''')
 		stderr.write('Setup %s database\n'%(self.dbname))
 
 	def insert(self, uid, user, tweet_count, tweet, links, created_at):

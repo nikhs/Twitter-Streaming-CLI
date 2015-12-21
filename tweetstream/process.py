@@ -55,6 +55,3 @@ def start_streaming(track):
 
 			print '-'*40
 
-if __name__ == '__main__':
-	print 'mining'
- 	start_background_mining('')

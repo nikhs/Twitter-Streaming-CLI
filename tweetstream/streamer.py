@@ -23,5 +23,6 @@ class Streamer(object):
 			stderr.write('\nMalformed data. Ignoring.\n')
 			pass
 
+
 	def start(self):
 		return self.stream_handler.stream()
