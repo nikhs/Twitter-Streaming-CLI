@@ -1,5 +1,8 @@
 from requests import post
 from requests_oauthlib import OAuth1
+from httplib import IncompleteRead
+from requests import RequestException
+from sys import stderr, exit
 
 class TwitStream(object):
 	"""Creates a handle for twitter streams."""
@@ -49,7 +52,13 @@ class TwitStream(object):
 		self.response = post(TwitStream.ENDPOINT, auth = self.oauth, 
 			data={'track':self.track}, headers = self.headers, stream = True)
 		
-		for line in self.response.iter_lines():
-			if line:
-				yield line
-
+		try:
+			for line in self.response.iter_lines():
+				if line:
+					yield line
+		except IncompleteRead:
+			stderr.write('\HTTP Error. Network gave incorrrect reponse. FATAL. Exiting.\n')
+			exit(1)
+		except RequestException:
+			stderr.write('\nGeneral Network error. FATAL. Exiting.\n')
+			exit(1)
