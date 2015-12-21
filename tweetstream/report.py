@@ -19,7 +19,7 @@ def generate_user_report(minutes_ago):
 
 	with Database() as db:
 		for row in db.select(unix_time_minutes_ago(minutes_ago)):
-			print  'User:',row[USER], ', Total tweets:', row[TWEET_COUNT]
+			print  'User:',row[USER].encode('utf-8'), ', Total tweets:', row[TWEET_COUNT]
 
 	print '-' * 32
 
@@ -48,7 +48,7 @@ def generate_content_report(minutes_ago):
 	print 'Total unique words:', len(word_frequency)
 	print '10 Most common words'
 	for word, count in  word_frequency.most_common(10):
-		print word,' -> ',count
+		print word.encode('utf-8'),' -> ',count
 
 	print '-' * 32
 
