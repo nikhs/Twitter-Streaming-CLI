@@ -16,7 +16,7 @@ Python dependencies should be installed from the requirements file.
 pip install -r requirements.txt
 ```
 
-Twitter App credentials should be stored in ```tweetstream/config.php``` file.
+Twitter App credentials should be stored in ```config.py``` file.
 
 ### Usage
 
@@ -40,7 +40,7 @@ ie ```coldplay the_batman``` searches for tweets containing  *'coldplay'* OR *'t
 ```shell
 stream.py the_batman > out
 ```
-Writes all tweets to ```out``` file.
+Writes reports based on tweets to ```out``` file every minute.
 
 
 ### License
