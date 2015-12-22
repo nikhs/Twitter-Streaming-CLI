@@ -18,7 +18,7 @@ Python dependencies should be installed from the requirements file.
 pip install -r requirements.txt
 ```
 
-Twitter App credentials should be stored in ```tweetstream/config.php``` file.
+Twitter App credentials should be stored in ```tweetstream/config.py``` file.
 
 ### Usage
 

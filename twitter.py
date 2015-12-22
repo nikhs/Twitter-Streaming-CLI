@@ -5,7 +5,7 @@ from time import sleep
 
 
 def showUsage():
-	sys.stderr.write('\nUsage command.py <operation> [<arg>]\n')
+	sys.stderr.write('\nUsage twitter.py <operation> [<arg>]\n')
 	sys.stderr.write('where operation can be: stream or report\n\n')
 	sys.stderr.write('stream: prints twitter streams to the console\n')
 	sys.stderr.write('report: Generates reports based on the stream\n')
