@@ -160,7 +160,7 @@ def generate_reports(db, minutes_ago):
 
 # Begin REPORT PROCESSING
 
-	minutes_ago_dt = datetime.datetime.now() - datetime.timedelta(minutes=minutes_ago)
+	minutes_ago_dt = datetime.datetime.utcnow() - datetime.timedelta(minutes=minutes_ago)
 	minutes_ago_unix = datetime_to_unix(minutes_ago_dt)
 
 	links =[]
@@ -213,7 +213,7 @@ def process(track='tweet'):
 			with Database() as db:
 				stream(db, track)
 				minutes+= 1
-				stderr.write('\Generating Reports...')
+				stderr.write('\nGenerating Reports...')
 
 				minutes_ago = minutes
 				if minutes_ago > 5:
