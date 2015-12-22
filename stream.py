@@ -1,20 +1,26 @@
-from requests import post
-from requests_oauthlib import OAuth1
-from httplib import IncompleteRead
-from requests import RequestException
+# Built-in
 from sys import stderr, exit, argv
-from config import *
-from time import time
 from json import loads
+from time import time
+from urlparse import urlparse
+from collections import Counter
+from httplib import IncompleteRead
+import re
 import datetime
 import pytz
-from tzlocal import get_localzone
 import sqlite3
-from urlparse import urlparse
-import re
-from collections import Counter
+
+# 3rd Party
+from requests import post
+from requests_oauthlib import OAuth1
+from requests import RequestException
+from tzlocal import get_localzone
+
+# Data Files
+from config import *
 from commonwords import common_words_list
 
+# Handle db connections
 class Database(object):
 	"""Manage db connections."""
 	def __init__(self, dbname='tweets.db'):
@@ -45,6 +51,8 @@ class Database(object):
 	def __exit__(self, type, value, traceback):
 		self.connection.close()
 
+# Time handling helper functions
+
 def datetime_to_unix(dt):
 	epoch = datetime.datetime.utcfromtimestamp(0)
 	delta =  dt-epoch
@@ -54,6 +62,7 @@ def twitter_time_to_unix(twitter_time):
 	dt = datetime.datetime.strptime(twitter_time,'%a %b %d %H:%M:%S +0000 %Y').replace(tzinfo=None)
 	return datetime_to_unix(dt)
 
+# Twitter stream processing
 def stream(db, track):
 	
 	ENDPOINT = 'https://stream.twitter.com/1.1/statuses/filter.json'
@@ -104,7 +113,7 @@ def stream(db, track):
 
 		running = False
 
-
+# Generate required reports
 def generate_reports(db, minutes_ago):
 
 	# DB column indexes
@@ -196,6 +205,7 @@ def generate_reports(db, minutes_ago):
 
 # End REPORTS
 
+# Encapsulate mining and report generation
 def process(track='tweet'):
 	minutes = 0
 	try:
@@ -220,17 +230,19 @@ def process(track='tweet'):
 	except KeyboardInterrupt:
 		stderr.write('\n\nShutting Down!!!')
 
+# Show command usage
 def showUsage():
 	stderr.write('\nUsage stream.py <track_args>\n')
 	stderr.write('track_args: space seperated list of phrases.\nReplace space in phrase with _ if needed, else every space seperated word is taken as seperate phrases.\n\n')
 	stderr.write('eg: to search for tweets with "the batman" include it here as "the_batman"(Without quotes)\n')
 	exit(1)
 
+# Store track fields and process
 def main():
 	try:
 		# Obtain input track phrases
-		if argv[2]:
-			track = map(lambda word: word.replace('_', ' '), argv[2:])
+		if argv[1]:
+			track = map(lambda word: word.replace('_', ' '), argv[1:])
 			track = ','.join(track)
 
 			process(track)
